@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'navigation_bar.dart';
 import 'package:task_battle/new_task.dart';
 import 'dart:math';
 

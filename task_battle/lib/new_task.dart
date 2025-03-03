@@ -1,30 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:task_battle/adding_friends.dart';
 
-String? selectedMode; // Переменная для хранения выбранного значения
+class NewTaskScreen extends StatefulWidget {
+  @override
+  _NewTaskScreenState createState() => _NewTaskScreenState();
+}
 
-class NewTaskScreen extends StatelessWidget {
+class _NewTaskScreenState extends State<NewTaskScreen> {
+  String? selectedMode;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Новая задача', style: TextStyle(color: Colors.green)), backgroundColor: Colors.white, elevation: 0),
       body: Padding(
         padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
+          
           children: [
-            TextField(decoration: InputDecoration(labelText: 'Название сессии',   )), 
+            TextField(decoration: InputDecoration(labelText: 'Название сессии', labelStyle: TextStyle(fontSize: 18) )), 
             SizedBox(height: 10),
 
-            Text('Кому назначено: ', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 10),
+            //Text('Участники: ', style: TextStyle(fontSize: 18)),
+            //SizedBox(height: 10),
+            
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child:
+              TextButton(onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddMembersScreen())), 
+              child: 
+              Text('+ Добавить друзей в сессию', style: TextStyle(fontSize: 18),)
+              )
+            ),
+            SizedBox(height: 20),
 
-            TextButton(onPressed: () => _showSessionDialog(context), child: Text('+ Пригласить друзей')),
-
-            TextField(decoration: InputDecoration(labelText: 'Описание')),
-            SizedBox(height: 10),
+            SingleChildScrollView(
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Описание',
+                  labelStyle: TextStyle(
+                    fontSize: 18, // Размер текста labelText
+                  ),
+                  border: OutlineInputBorder(), // Рамка вокруг TextField
+                ),
+                keyboardType: TextInputType.multiline, // Многострочный ввод
+                maxLines: null, // Позволяет TextField увеличиваться вертикально
+              ),
+            ),
+            SizedBox(height: 30),
 
             Text("Режим сессии",style: TextStyle(fontSize: 20)),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
 
             Column(
               children: <Widget>[
@@ -33,9 +61,9 @@ class NewTaskScreen extends StatelessWidget {
                   value: 'infinity',
                   groupValue: selectedMode,
                   onChanged: (String? value) {
-                    setState() {
+                    setState(() {
                       selectedMode = value; // Обновляем выбранное значение
-                    };
+                    });
                   },
                 ),
                 RadioListTile<String>(
@@ -43,15 +71,15 @@ class NewTaskScreen extends StatelessWidget {
                   value: 'terminal',
                   groupValue: selectedMode,
                   onChanged: (String? value) {
-                    setState() {
+                    setState(() {
                       selectedMode = value; // Обновляем выбранное значение
-                    };
+                    });
                   },
                 ),
               ],
             ),
 
-
+            SizedBox( height: 20,),
             ElevatedButton(onPressed: () {}, child: Text('Создать')),
           ],
         ),
@@ -61,24 +89,5 @@ class NewTaskScreen extends StatelessWidget {
   
 
 
-  void _showSessionDialog(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-height: 200,
-          child: Column(
-            children: [
-              Text('Добавить сессию', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
-              TextField(decoration: InputDecoration(labelText: 'Название сессии')),
-              SizedBox(height: 10),
-              ElevatedButton(onPressed: () => Navigator.pop(context), child: Text('Сохранить')),
-            ],
-          ),
-        );
-      },
-    );
-  }
+
 }

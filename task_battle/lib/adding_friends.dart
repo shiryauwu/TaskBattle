@@ -18,7 +18,7 @@ class _AddMembersScreenState extends State<AddMembersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Members', style: TextStyle(color: Colors.black)),
+        title: Text('Добавить друзей', style: TextStyle(color: Colors.green)),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -79,12 +79,15 @@ class _AddMembersScreenState extends State<AddMembersScreen> {
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 16, bottom:16, left:16, right:16),
-            child: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Colors.blue,
-              child: Icon(Icons.arrow_forward),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.only(top: 16, bottom:16, left:16, right:16),
+              child: FloatingActionButton(
+                onPressed: () => Navigator.pop(context), //Обработка синей стрелки
+                backgroundColor: Colors.green,
+                child: Icon(Icons.arrow_forward),
+              ),
             ),
           ),
         ],

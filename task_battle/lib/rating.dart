@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:task_battle/navigation_bar.dart';
 
-
-class RatingPage extends StatefulWidget {
-  const RatingPage({super.key});
-
+class TaskBattleApp extends StatelessWidget {
   @override
-  _RatingPageState createState() => _RatingPageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: RatingScreen(),
+    );
+  }
 }
 
-class _RatingPageState extends State<RatingPage> {
+class RatingScreen extends StatelessWidget {
   final List<Map<String, dynamic>> users = [
     {'name': 'София', 'xp': 750, 'avatar': 'lib/assets/icons/kanye.jpg'},
     {'name': 'Константин', 'xp': 600, 'avatar': 'lib/assets/icons/kanye.jpg'},
@@ -24,20 +25,12 @@ class _RatingPageState extends State<RatingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Рейтинг', style: TextStyle(color: Colors.green, fontSize: 24, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.green),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const MainNavigationBar()),
-            );
-          },
-        ),
-        centerTitle: true, // Делаем заголовок по центру
-        title: const Text(
-          'Рейтинг',
-          style: TextStyle(color: Colors.green, fontSize: 24, fontWeight: FontWeight.bold),
+        leading: TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Назад', style: TextStyle(color: Colors.green, fontSize: 18)),
         ),
       ),
       body: Column(
@@ -52,9 +45,9 @@ class _RatingPageState extends State<RatingPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildTopUser('Асап Роки', 1000, 'lib/assets/icons/kanye.jpg', 'lib/assets/icons/2nd.png'),
-                _buildTopUser('Алина', 1450, 'lib/assets/icons/kanye.jpg', 'lib/assets/icons/1st.png'),
-                _buildTopUser('Денис', 900, 'lib/assets/icons/kanye.jpg', 'lib/assets/icons/3rd.png'),
+                _buildTopUser('Асап Роки', 1000, 'lib/assets/icons/kanye.jpg', 'lib/assets/icons/XP.png'),
+                _buildTopUser('Алина', 1450, 'lib/assets/icons/kanye.jpg', 'lib/assets/icons/XP.png'),
+                _buildTopUser('Денис', 900, 'lib/assets/icons/kanye.jpg', 'lib/assets/icons/XP.png'),
               ],
             ),
           ),
@@ -80,7 +73,7 @@ class _RatingPageState extends State<RatingPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${users[index]['xp']} ',
+                          '${users[index]['xp']} XP',
                           style: TextStyle(
                             color: users[index]['highlight'] == true ? Colors.white : Colors.black,
                             fontWeight: FontWeight.bold,
@@ -113,7 +106,7 @@ class _RatingPageState extends State<RatingPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Image.asset(medal, width: 20, height: 20),
             SizedBox(width: 4),
-            Text('$xp ', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('$xp XP', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_battle/new_task.dart';
+import 'package:task_battle/registration.dart';
 import 'dart:math';
 
 class HomePage extends StatefulWidget {
@@ -88,7 +89,10 @@ class TaskCard extends StatelessWidget {
             SizedBox(height: 15),
             ElevatedButton(
               onPressed: () {
-    // Действие при нажатии
+                Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AuthScreen()),);
+        
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white, // Цвет фона кнопки

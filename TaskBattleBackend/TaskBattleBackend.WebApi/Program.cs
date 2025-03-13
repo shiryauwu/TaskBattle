@@ -23,7 +23,7 @@ namespace TaskBattleBackend.WebApi
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            builder.Services.AddDbContext<TaskBattleContext>((provider, options) =>
+            builder.Services.AddDbContext<TaskBattleContext>((provider, options) => 
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -116,7 +116,7 @@ namespace TaskBattleBackend.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.MapControllers();
 
             app.Run();

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskBattleBackend.Library.DbContext;
@@ -11,9 +12,11 @@ using TaskBattleBackend.Library.DbContext;
 namespace TaskBattleBackend.Library.Migrations
 {
     [DbContext(typeof(TaskBattleContext))]
-    partial class TaskBattleContextModelSnapshot : ModelSnapshot
+    [Migration("20250312062609_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,12 +100,17 @@ namespace TaskBattleBackend.Library.Migrations
 
             modelBuilder.Entity("TaskBattleBackend.Library.Models.SessionParticipant", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ParticipantIdId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
 
+                    b.HasKey("Id");
 
                     b.HasIndex("ParticipantIdId");
 
@@ -124,6 +132,8 @@ namespace TaskBattleBackend.Library.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -144,7 +154,10 @@ namespace TaskBattleBackend.Library.Migrations
             modelBuilder.Entity("TaskBattleBackend.Library.Models.Friendship", b =>
                 {
                     b.HasOne("TaskBattleBackend.Library.Models.User", "FriendFirst")
+                        .WithMany()
                         .HasForeignKey("FriendFirstId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskBattleBackend.Library.Models.User", "FriendSecond")
                         .WithMany()
@@ -178,28 +191,21 @@ namespace TaskBattleBackend.Library.Migrations
 
             modelBuilder.Entity("TaskBattleBackend.Library.Models.SessionParticipant", b =>
                 {
+                    b.HasOne("TaskBattleBackend.Library.Models.User", "ParticipantId")
+                        .WithMany()
+                        .HasForeignKey("ParticipantIdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TaskBattleBackend.Library.Models.Session", "Session")
+                        .WithMany()
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("ParticipantId");
 
                     b.Navigation("Session");
-                });
-
-            modelBuilder.Entity("TaskBattleBackend.Library.Models.Session", b =>
-                {
-                    b.Navigation("SessionParticipants");
-                });
-
-            modelBuilder.Entity("TaskBattleBackend.Library.Models.User", b =>
-                {
-                    b.Navigation("Friendships");
-
-                    b.Navigation("SessionParticipants");
                 });
 #pragma warning restore 612, 618
         }

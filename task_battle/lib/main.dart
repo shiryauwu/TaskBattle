@@ -1,14 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:task_battle/navigation_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_battle/auth_page.dart';
+import 'navigation_bar.dart';
+import 'models/user.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final user = await _getUser();
+
+  runApp(MyApp(user: user));
+}
+
+Future<User?> _getUser() async {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('auth_token');
+  final username = prefs.getString('username');
+  final email = prefs.getString('email');
+  final id = prefs.getInt('id');
+
+  if (token != null && username != null && email != null && id != null) {
+    return User(
+      id: id,
+      username: username,
+      email: email,
+      token: token,
+    );
+  }
+
+  return null;
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final User? user;
 
-  // This widget is the root of your application.
+  const MyApp({super.key, this.user});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MainNavigationBar(),
+      home: user != null ? const MainNavigationBar() : const AuthScreen(),
     );
   }
 }

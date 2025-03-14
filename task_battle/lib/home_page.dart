@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_battle/new_task.dart';
-import 'package:task_battle/registration.dart';
+import 'package:task_battle/auth_page.dart';
 import 'dart:math';
 
 class HomePage extends StatefulWidget {

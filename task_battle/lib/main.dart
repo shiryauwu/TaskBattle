@@ -16,7 +16,7 @@ Future<User?> _getUser() async {
   final token = prefs.getString('auth_token');
   final username = prefs.getString('username');
   final email = prefs.getString('email');
-  final id = prefs.getInt('id');
+  final id = prefs.getString('id');
 
   if (token != null && username != null && email != null && id != null) {
     return User(

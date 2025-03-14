@@ -11,7 +11,7 @@ class _AddMembersScreenState extends State<AddMembersScreen> {
     {'name': 'Ильнур', 'selected': false, 'avatar': 'lib/assets/icons/drake.jpg'},
     {'name': 'Женя', 'selected': false, 'avatar': 'lib/assets/icons/trav.jpg'},
     {'name': 'Денис', 'selected': false, 'avatar': 'lib/assets/icons/uzi.jpg'},
-    {'name': 'что-то горячее', 'selected': false, 'avatar':'lib/assets/icons/sza.png'},
+    {'name': 'Кто-то', 'selected': false, 'avatar':'lib/assets/icons/sza.png'},
   ];
 
   @override

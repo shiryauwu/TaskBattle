@@ -1,8 +1,8 @@
 class User {
-  final int id;
-  final String username;
-  final String email;
-  final String token;
+  final String? id;
+  final String? username;
+  final String? email;
+  final String? token;
 
   User({
     required this.id,
@@ -31,7 +31,7 @@ class User {
 
   factory User.empty() {
     return User(
-      id: 0,
+      id: '',
       username: '',
       email: '',
       token: '',

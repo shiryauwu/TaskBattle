@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,37 +20,44 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
 
   Future<void> _authenticate() async {
-    final url = Uri.parse('https://46.29.161.173:80/api/v1/User/${isLogin ? 'authorize' : 'register'}');
-
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'username': usernameController.text,
-        'password': passwordController.text,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-
-      // Создаём объект User из ответа сервера
-      User user = User.fromJson(data);
-
-      // Сохраняем данные пользователя в SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('auth_token', user.token);
-      await prefs.setString('username', user.username);
-      await prefs.setString('email', user.email);
-      await prefs.setInt('id', user.id);
-
-      // Переход к главному экрану
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const MainNavigationBar()),
+    try {
+      final url = Uri.parse('http://46.29.161.173:80/api/v1/User/${isLogin ? 'authorize' : 'register'}');
+      print(usernameController.text);
+      print(passwordController.text);
+      print(url);
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'username': usernameController.text,
+          'password': passwordController.text,
+        }),
       );
-    } else {
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        // Создаём объект User из ответа сервера
+        User user = User.fromJson(data);
+
+        // Сохраняем данные пользователя в SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', user.token.toString());
+        await prefs.setString('username', user.username.toString());
+        await prefs.setString('id', user.id.toString());
+
+        // Переход к главному экрану
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const MainNavigationBar()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка: ${response.body}')),
+        );
+      }
+      } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка: ${response.body}')),
+        SnackBar(content: Text('$e')),
       );
     }
   }

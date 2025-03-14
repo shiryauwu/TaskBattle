@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskBattleBackend.Library.DbContext;
@@ -11,9 +12,11 @@ using TaskBattleBackend.Library.DbContext;
 namespace TaskBattleBackend.Library.Migrations
 {
     [DbContext(typeof(TaskBattleContext))]
-    partial class TaskBattleContextModelSnapshot : ModelSnapshot
+    [Migration("20250314133036_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,9 +64,6 @@ namespace TaskBattleBackend.Library.Migrations
                     b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SessionId1")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("SessionStatus")
                         .HasColumnType("text");
 
@@ -75,8 +75,6 @@ namespace TaskBattleBackend.Library.Migrations
                     b.HasIndex("SenderId");
 
                     b.HasIndex("SessionId");
-
-                    b.HasIndex("SessionId1");
 
                     b.ToTable("Messages");
                 });
@@ -185,10 +183,6 @@ namespace TaskBattleBackend.Library.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TaskBattleBackend.Library.Models.Session", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("SessionId1");
-
                     b.Navigation("Sender");
 
                     b.Navigation("Session");
@@ -215,8 +209,6 @@ namespace TaskBattleBackend.Library.Migrations
 
             modelBuilder.Entity("TaskBattleBackend.Library.Models.Session", b =>
                 {
-                    b.Navigation("Messages");
-
                     b.Navigation("SessionParticipants");
                 });
 

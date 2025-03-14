@@ -13,6 +13,7 @@ namespace TaskBattleBackend.Library.Models
         public string Type { get; set; }
         public string? Description { get; set; }
         public List<SessionParticipant>? SessionParticipants { get; set; }
+        public List<Message> Messages { get; set; }
 
     }
 }

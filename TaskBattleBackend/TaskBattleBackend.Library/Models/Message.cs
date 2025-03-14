@@ -12,12 +12,11 @@ namespace TaskBattleBackend.Library.Models
         public Guid Id { get; set; }
         public string? Text { get; set; }
         public Guid SenderId { get; set; }
-        [ForeignKey("SenderId")]
-        public virtual User Sender { get; set; }
+        public User? Sender { get; set; }
 
         public Guid SessionId { get; set; }
-        [ForeignKey("SessionId")]
-        public virtual Session Session { get; set; }
+        public Session? Session { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string? SessionStatus { get; set; }
         public int Rating { get; set; }
     }

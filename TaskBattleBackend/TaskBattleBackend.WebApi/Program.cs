@@ -9,6 +9,7 @@ using TaskBattleBackend.Library.DbContext;
 using TaskBattleBackend.Library.Models;
 using TaskBattleBackend.Library.Repositories;
 using TaskBattleBackend.Library.Services;
+using TaskBattleBackend.WebApi.Hubs;
 
 namespace TaskBattleBackend.WebApi
 {
@@ -39,6 +40,20 @@ namespace TaskBattleBackend.WebApi
                         ValidAudience = builder.Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) &&
+                                (path.StartsWithSegments("/chat")))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             builder.Services.AddSingleton<AuthService>();
@@ -48,6 +63,12 @@ namespace TaskBattleBackend.WebApi
             builder.Services.AddScoped<SessionRepository>();
             builder.Services.AddScoped<SessionParticipantRepository>();
             builder.Services.AddScoped<FriendshipRepository>();
+            builder.Services.AddScoped<MessageRepository>();
+            builder.Logging.AddConsole();
+            builder.Services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
 
             builder.Services.AddControllers(options =>
             {
@@ -58,7 +79,18 @@ namespace TaskBattleBackend.WebApi
                 options.SuppressModelStateInvalidFilter = true;
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000") // Укажи адрес клиента
+                               .AllowAnyMethod()
+                               .AllowAnyHeader()
+                               .AllowCredentials()
+                               .SetIsOriginAllowed(_ => true);
+                    });
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -103,6 +135,8 @@ namespace TaskBattleBackend.WebApi
                 serverOptions.Limits.MaxRequestBodySize = 104857600;
             });
 
+            builder.Services.AddSignalR();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -111,13 +145,21 @@ namespace TaskBattleBackend.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("AllowAll");
 
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.MapControllers();
+            app.MapHub<ChatHub>("/chat");
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TaskBattleContext>();
+                dbContext.Database.Migrate();
+            }
 
             app.Run();
         }

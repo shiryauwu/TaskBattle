@@ -42,6 +42,14 @@ namespace TaskBattleBackend.Library.Repositories
             return existingEntity;
         }
 
+        public List<Message> GetBySessionId(Guid id) 
+        {
+            return _context.Messages
+                .Where(m => m.SessionId == id)
+                .OrderBy(m => m.CreatedAt)
+                .ToList();
+        }
+
         public List<Message> Get()
         {
             return _context.Messages.ToList();

@@ -12,8 +12,8 @@ using TaskBattleBackend.Library.DbContext;
 namespace TaskBattleBackend.Library.Migrations
 {
     [DbContext(typeof(TaskBattleContext))]
-    [Migration("20250314105322_Initial")]
-    partial class Initial
+    [Migration("20250314135552_Initial1")]
+    partial class Initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,9 @@ namespace TaskBattleBackend.Library.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
@@ -59,6 +62,9 @@ namespace TaskBattleBackend.Library.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("SessionId1")
                         .HasColumnType("uuid");
 
                     b.Property<string>("SessionStatus")
@@ -72,6 +78,8 @@ namespace TaskBattleBackend.Library.Migrations
                     b.HasIndex("SenderId");
 
                     b.HasIndex("SessionId");
+
+                    b.HasIndex("SessionId1");
 
                     b.ToTable("Messages");
                 });
@@ -180,6 +188,10 @@ namespace TaskBattleBackend.Library.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TaskBattleBackend.Library.Models.Session", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("SessionId1");
+
                     b.Navigation("Sender");
 
                     b.Navigation("Session");
@@ -206,6 +218,8 @@ namespace TaskBattleBackend.Library.Migrations
 
             modelBuilder.Entity("TaskBattleBackend.Library.Models.Session", b =>
                 {
+                    b.Navigation("Messages");
+
                     b.Navigation("SessionParticipants");
                 });
 

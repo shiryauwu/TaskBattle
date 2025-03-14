@@ -40,6 +40,8 @@ namespace TaskBattleBackend.Library.DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
 
+
+
             modelBuilder.Entity<Friendship>()
                 .HasOne(f => f.FriendFirst)
                 .WithMany(u => u.Friendships)
@@ -56,6 +58,9 @@ namespace TaskBattleBackend.Library.DbContext
                 .Navigation(u => u.Friendships)
                 .AutoInclude(false);
 
+            modelBuilder.Entity<Session>()
+                .Navigation(s => s.Messages)
+                .AutoInclude(false);
 
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Sender)

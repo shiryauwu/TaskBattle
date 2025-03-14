@@ -75,6 +75,7 @@ namespace TaskBattleBackend.Library.Migrations
                     Text = table.Column<string>(type: "text", nullable: true),
                     SenderId = table.Column<Guid>(type: "uuid", nullable: false),
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     SessionStatus = table.Column<string>(type: "text", nullable: true),
                     Rating = table.Column<int>(type: "integer", nullable: false)
                 },

@@ -21,6 +21,7 @@ namespace TaskBattleBackend.Library.Repositories
 
             var sessionParticipant = new SessionParticipant
             {
+                Id = Guid.NewGuid(),
                 ParticipantId = participantId,
                 SessionId = sessionId
             };

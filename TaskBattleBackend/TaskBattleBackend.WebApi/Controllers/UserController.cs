@@ -106,6 +106,13 @@ namespace TaskBattleBackend.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("get-all-users")]
+        public IActionResult GetAllUsers()
+        {
+            return Ok(_userRepository.GetAll());
+        }
+
+        [Authorize]
         [HttpGet("get-user-by-id")]
         public IActionResult GetUserById(Guid id)
         {

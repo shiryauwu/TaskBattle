@@ -28,7 +28,7 @@ namespace TaskBattleBackend.Library.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("FriendFirstId")
+                    b.Property<Guid?>("FriendFirstId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("FriendSecondId")
@@ -97,14 +97,16 @@ namespace TaskBattleBackend.Library.Migrations
 
             modelBuilder.Entity("TaskBattleBackend.Library.Models.SessionParticipant", b =>
                 {
+                    b.Property<Guid>("ParticipantId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-
-                    b.HasIndex("ParticipantIdId");
+                    b.HasKey("ParticipantId", "SessionId");
 
                     b.HasIndex("SessionId");
 
@@ -124,6 +126,8 @@ namespace TaskBattleBackend.Library.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("bytea");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -144,7 +148,9 @@ namespace TaskBattleBackend.Library.Migrations
             modelBuilder.Entity("TaskBattleBackend.Library.Models.Friendship", b =>
                 {
                     b.HasOne("TaskBattleBackend.Library.Models.User", "FriendFirst")
+                        .WithMany("Friendships")
                         .HasForeignKey("FriendFirstId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TaskBattleBackend.Library.Models.User", "FriendSecond")
                         .WithMany()
@@ -178,14 +184,19 @@ namespace TaskBattleBackend.Library.Migrations
 
             modelBuilder.Entity("TaskBattleBackend.Library.Models.SessionParticipant", b =>
                 {
+                    b.HasOne("TaskBattleBackend.Library.Models.User", "Participant")
+                        .WithMany("SessionParticipants")
+                        .HasForeignKey("ParticipantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TaskBattleBackend.Library.Models.Session", "Session")
+                        .WithMany("SessionParticipants")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Participant");
 
                     b.Navigation("Session");
                 });

@@ -12,7 +12,7 @@ using TaskBattleBackend.Library.DbContext;
 namespace TaskBattleBackend.Library.Migrations
 {
     [DbContext(typeof(TaskBattleContext))]
-    [Migration("20250313222241_Initial")]
+    [Migration("20250314105322_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

@@ -85,6 +85,11 @@ namespace TaskBattleBackend.Library.Repositories
                 .Select(p => p.FriendSecond).ToList();
         }
 
+        public List<User> GetAll()
+        {
+            return _context.Users.ToList();
+        }
+
         public User GetById(Guid id)
         {
             var user = _context.Users.Find(id);
